@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المخازن والنقل</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="glass-panel">
+        <h1>إدارة المخازن والحسابات</h1>
+    </header>
+
+    <main id="main-content">
+        
+        <section id="tab-add" class="tab-content active">
+            <div class="glass-card">
+                <h2>إضافة حركة جديدة</h2>
+                <form id="record-form">
+                    <div class="form-group">
+                        <label>التاريخ</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم السائق</label>
+                        <input type="text" id="driver-name" placeholder="أدخل اسم السائق" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم الشركة (للفلترة)</label>
+                        <input type="text" id="company-name" placeholder="مثل: جود العراق" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم السيارة والمحافظة</label>
+                        <input type="text" id="car-info" placeholder="رقم السيارة - المحافظة" required>
+                    </div>
+                    <div class="form-group">
+                        <label>نوع المادة</label>
+                        <input type="text" id="material-type" placeholder="مثل: حصو" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>الوحدة</label>
+                            <select id="unit-type">
+                                <option value="طن">طن</option>
+                                <option value="متر">متر</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label>الكمية</label>
+                            <input type="number" id="quantity" step="0.001" placeholder="0" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>سعر الشراء (للوحدة)</label>
+                            <input type="number" id="purchase-price" placeholder="0" required>
+                        </div>
+                        <div class="form-group half">
+                            <label>سعر البيع (للوحدة)</label>
+                            <input type="number" id="selling-price" placeholder="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="calc-box glass-panel-inner">
+                        <p>إجمالي البيع: <span id="total-sale-display">0</span></p>
+                        <p>صافي الربح: <span id="net-profit-display" class="profit-text">0</span></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>اسم المسدد (الصندوق)</label>
+                        <input type="text" id="cashier-name" placeholder="الشخص المستلم للمبلغ" required>
+                    </div>
+                    <div class="form-group">
+                        <label>المبلغ الواصل (نقد)</label>
+                        <input type="number" id="amount-received" placeholder="0" required>
+                    </div>
+                    
+                    <div class="calc-box glass-panel-inner warning">
+                        <p>المتبقي (ديون): <span id="remaining-debt-display">0</span></p>
+                    </div>
+
+                    <button type="submit" class="btn-primary">حفظ البيانات</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="tab-transactions" class="tab-content">
+            <div class="glass-card">
+                <h2>الحركات اليومية</h2>
+                <div class="search-box">
+                    <input type="text" id="search-driver" placeholder="بحث باسم السائق...">
+                    <input type="date" id="search-date">
+                </div>
+                <div class="table-responsive">
+                    <table id="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>السائق</th>
+                                <th>الشركة</th>
+                                <th>المادة</th>
+                                <th>الكمية</th>
+                                <th>الإجمالي</th>
+                                <th>الواصل</th>
+                                <th>الديون</th>
+                                <th>الربح</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-dashboard" class="tab-content">
+            <div class="glass-card">
+                <h2>إحصائيات المخزن والأرباح</h2>
+                <div class="filter-box">
+                    <label>تصفية حسب الشركة:</label>
+                    <select id="filter-company">
+                        <option value="all">الكل</option>
+                        </select>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box glass-panel-inner">
+                        <h3>إجمالي الكميات الموردة</h3>
+                        <p id="stat-total-qty">0</p>
+                    </div>
+                    <div class="stat-box glass-panel-inner">
+                        <h3>إجمالي الأرباح الصافية</h3>
+                        <p id="stat-total-profit">0</p>
+                    </div>
+                    <div class="stat-box glass-panel-inner warning">
+                        <h3>إجمالي الديون في السوق</h3>
+                        <p id="stat-total-debt">0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="bottom-nav glass-panel">
+        <div class="nav-item active" data-target="tab-add">
+            <i class="fas fa-plus-circle"></i>
+            <span>إضافة</span>
+        </div>
+        <div class="nav-item" data-target="tab-transactions">
+            <i class="fas fa-list-alt"></i>
+            <span>الحركات</span>
+        </div>
+        <div class="nav-item" data-target="tab-dashboard">
+            <i class="fas fa-chart-pie"></i>
+            <span>الإحصائيات</span>
+        </div>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html>
