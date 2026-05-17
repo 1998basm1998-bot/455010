@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>نظام إدارة المخازن والنقل</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,8 +17,10 @@
         
         <section id="tab-add" class="tab-content active">
             <div class="glass-card">
-                <h2>إضافة حركة جديدة</h2>
+                <h2>بيانات الحركة</h2>
                 <form id="record-form">
+                    <input type="hidden" id="record-id" value="">
+                    
                     <div class="form-group">
                         <label>التاريخ</label>
                         <input type="date" id="date" required>
@@ -81,7 +83,7 @@
                         <p>المتبقي (ديون): <span id="remaining-debt-display">0</span></p>
                     </div>
 
-                    <button type="submit" class="btn-primary">حفظ البيانات</button>
+                    <button type="submit" id="submit-btn" class="btn-primary">حفظ البيانات</button>
                 </form>
             </div>
         </section>
@@ -99,13 +101,14 @@
                             <tr>
                                 <th>التاريخ</th>
                                 <th>السائق</th>
+                                <th>السيارة</th>
                                 <th>الشركة</th>
                                 <th>المادة</th>
                                 <th>الكمية</th>
-                                <th>الإجمالي</th>
                                 <th>الواصل</th>
                                 <th>الديون</th>
                                 <th>الربح</th>
+                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody id="transactions-body">
@@ -146,7 +149,7 @@
     <nav class="bottom-nav glass-panel">
         <div class="nav-item active" data-target="tab-add">
             <i class="fas fa-plus-circle"></i>
-            <span>إضافة</span>
+            <span>البيانات</span>
         </div>
         <div class="nav-item" data-target="tab-transactions">
             <i class="fas fa-list-alt"></i>
