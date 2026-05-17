@@ -30,7 +30,7 @@
                         <input type="text" id="driver-name" placeholder="أدخل اسم السائق" required>
                     </div>
                     <div class="form-group">
-                        <label>اسم الشركة (للفلترة)</label>
+                        <label>اسم الشركة (للفلترة والكشف)</label>
                         <input type="text" id="company-name" placeholder="مثل: جود العراق" required>
                     </div>
                     <div class="form-group">
@@ -80,7 +80,7 @@
                     </div>
                     
                     <div class="calc-box glass-panel-inner warning">
-                        <p>المتبقي (ديون): <span id="remaining-debt-display">0</span></p>
+                        <p>المتبقي الديون (حسب الشراء): <span id="remaining-debt-display">0</span></p>
                     </div>
 
                     <button type="submit" id="submit-btn" class="btn-primary">حفظ البيانات</button>
@@ -111,9 +111,108 @@
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
-                        <tbody id="transactions-body">
-                            </tbody>
+                        <tbody id="transactions-body"></tbody>
                     </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-financial" class="tab-content">
+            <div class="glass-card">
+                <h2>حركات الصندوق (قبض وصرف)</h2>
+                <form id="financial-form">
+                    <input type="hidden" id="financial-id">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>التاريخ</label>
+                            <input type="date" id="fin-date" required>
+                        </div>
+                        <div class="form-group half">
+                            <label>نوع الحركة</label>
+                            <select id="fin-type">
+                                <option value="receipt">سند قبض (استلام نقد)</option>
+                                <option value="payment">سند صرف (دفع نقد)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>المبلغ</label>
+                        <input type="number" id="fin-amount" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الجهة (اسم الشركة أو السائق)</label>
+                        <input type="text" id="fin-entity" placeholder="الجهة المرتبطة بالحركة" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ملاحظات</label>
+                        <input type="text" id="fin-notes" placeholder="تفاصيل إضافية...">
+                    </div>
+                    <button type="submit" id="fin-submit-btn" class="btn-primary">حفظ السند</button>
+                </form>
+
+                <h3 style="margin-top:25px; color:var(--accent-color); border-bottom:1px solid var(--glass-border); padding-bottom:10px;">سجل الصندوق</h3>
+                <div class="table-responsive" style="margin-top:15px;">
+                    <table id="financial-table">
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>النوع</th>
+                                <th>الجهة</th>
+                                <th>المبلغ</th>
+                                <th>ملاحظات</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financial-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-statement" class="tab-content">
+            <div class="glass-card">
+                <h2>كشف حساب تفصيلي</h2>
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label>من تاريخ</label>
+                        <input type="date" id="stmt-from">
+                    </div>
+                    <div class="form-group half">
+                        <label>إلى تاريخ</label>
+                        <input type="date" id="stmt-to">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>اسم الجهة (شركة أو سائق)</label>
+                    <input type="text" id="stmt-entity" placeholder="اكتب اسم الجهة للبحث الدقيق...">
+                </div>
+                <button id="btn-generate-stmt" class="btn-primary">توليد الكشف</button>
+                
+                <div id="stmt-result" style="display:none; margin-top:25px;">
+                    <h3 style="color:var(--accent-color); margin-bottom:15px;">خلاصة الكشف</h3>
+                    <div class="stats-grid" style="margin-bottom:20px; grid-template-columns: 1fr 1fr;">
+                        <div class="stat-box glass-panel-inner warning">
+                            <h3>الرصيد المتبقي (الديون)</h3>
+                            <p id="stmt-final-balance">0</p>
+                        </div>
+                        <div class="stat-box glass-panel-inner" style="border-color: var(--profit-color);">
+                            <h3>إجمالي المسدد (له)</h3>
+                            <p id="stmt-total-paid" class="profit-text">0</p>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="stmt-table">
+                            <thead>
+                                <tr>
+                                    <th>التاريخ</th>
+                                    <th>البيان</th>
+                                    <th>المبلغ (عليه)</th>
+                                    <th>الواصل (له)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stmt-body"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
@@ -125,9 +224,13 @@
                     <label>تصفية حسب الشركة:</label>
                     <select id="filter-company">
                         <option value="all">الكل</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="stats-grid">
+                    <div class="stat-box glass-panel-inner" style="border-color: var(--profit-color);">
+                        <h3>رصيد الصندوق (النقد المتوفر)</h3>
+                        <p id="stat-safe-balance" class="profit-text">0</p>
+                    </div>
                     <div class="stat-box glass-panel-inner">
                         <h3>إجمالي الكميات الموردة</h3>
                         <p id="stat-total-qty">0</p>
@@ -155,9 +258,17 @@
             <i class="fas fa-list-alt"></i>
             <span>الحركات</span>
         </div>
+        <div class="nav-item" data-target="tab-financial">
+            <i class="fas fa-wallet"></i>
+            <span>الصندوق</span>
+        </div>
+        <div class="nav-item" data-target="tab-statement">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <span>كشف</span>
+        </div>
         <div class="nav-item" data-target="tab-dashboard">
             <i class="fas fa-chart-pie"></i>
-            <span>الإحصائيات</span>
+            <span>إحصاء</span>
         </div>
     </nav>
 
